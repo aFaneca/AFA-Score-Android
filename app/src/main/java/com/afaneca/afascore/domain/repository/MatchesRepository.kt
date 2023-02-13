@@ -6,6 +6,6 @@ import com.afaneca.afascore.domain.model.Match
 /**
  * Created by António Faneca on 2/13/2023.
  */
-interface ResultRepository {
+interface MatchesRepository {
     suspend fun getMatches(): Resource<List<Match>>
 }

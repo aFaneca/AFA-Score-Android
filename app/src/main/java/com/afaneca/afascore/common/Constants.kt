@@ -6,6 +6,7 @@ package com.afaneca.afascore.common
 object Constants {
 
     const val API_VERSION = "v1"
+    const val API_BASE_URL = "https://afascore.afaneca.com/api/"
 
     sealed class GAME_STATUS(val statusTag: String) {
         object NOT_STARTED : GAME_STATUS("NOT_STARTED")

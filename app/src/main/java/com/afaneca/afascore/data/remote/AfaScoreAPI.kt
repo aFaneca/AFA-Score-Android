@@ -7,7 +7,7 @@ import retrofit2.http.GET
 /**
  * Created by António Faneca on 2/13/2023.
  */
-interface AFAScoreAPI {
+interface AfaScoreAPI {
 
     @GET("/${API_VERSION}/results")
     suspend fun getResults(): List<MatchEntity>
