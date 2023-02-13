@@ -1,7 +1,7 @@
 package com.afaneca.afascore.data.remote
 
 import com.afaneca.afascore.common.Constants.API_VERSION
-import com.afaneca.afascore.data.remote.dto.MatchEntity
+import com.afaneca.afascore.data.remote.entity.MatchEntity
 import retrofit2.http.GET
 
 /**
@@ -9,6 +9,6 @@ import retrofit2.http.GET
  */
 interface AfaScoreAPI {
 
-    @GET("/${API_VERSION}/results")
-    suspend fun getResults(): List<MatchEntity>
+    @GET("/${API_VERSION}/matches")
+    suspend fun getMatches(): List<MatchEntity>
 }
