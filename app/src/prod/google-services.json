@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "72188197308",
+    "project_id": "afa-score",
+    "storage_bucket": "afa-score.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72188197308:android:ee4f309178d4ac6e69d3b9",
+        "android_client_info": {
+          "package_name": "com.afaneca.afascore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "72188197308-cppfpajjl9rg6uggokqjfrggrmolp0mp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDAlIw4i72kq6xhyIXlZLo-ifYQVjdTKg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "72188197308-cppfpajjl9rg6uggokqjfrggrmolp0mp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

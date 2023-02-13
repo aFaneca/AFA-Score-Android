@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "983692917987",
+    "project_id": "afa-score-dev",
+    "storage_bucket": "afa-score-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983692917987:android:2d1edff8dc232748f159d6",
+        "android_client_info": {
+          "package_name": "com.afaneca.afascore.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983692917987-61abuhpt1qn3844aipqvqkmcusgmjhlm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2CFohYZNLf997I5GdVQcDWWgQ__fslms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983692917987-61abuhpt1qn3844aipqvqkmcusgmjhlm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
