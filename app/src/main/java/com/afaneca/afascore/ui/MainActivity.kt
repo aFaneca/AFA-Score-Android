@@ -1,4 +1,4 @@
-package com.afaneca.afascore
+package com.afaneca.afascore.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
