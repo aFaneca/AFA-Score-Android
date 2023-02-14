@@ -1,5 +1,6 @@
 package com.afaneca.afascore.ui.model
 
+import com.afaneca.afascore.common.Constants
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -9,7 +10,7 @@ data class MatchUiModel(
     val id: String,
     val team1: TeamUiModel,
     val team2: TeamUiModel,
-    val status: String,
+    val status: Constants.GameStatus,
     val scoreboard: ScoreboardUiModel?,
     val startDate: String?,
     val startTime: String?,

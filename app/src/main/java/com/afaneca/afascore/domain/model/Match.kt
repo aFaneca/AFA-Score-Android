@@ -1,5 +1,6 @@
 package com.afaneca.afascore.domain.model
 
+import com.afaneca.afascore.common.Constants
 import com.afaneca.afascore.data.remote.entity.MatchEntity
 import com.afaneca.afascore.ui.model.MatchUiModel
 import com.google.gson.annotations.SerializedName
@@ -11,7 +12,7 @@ data class Match(
     val id: String,
     val team1: Team,
     val team2: Team,
-    val status: String,
+    val status: Constants.GameStatus,
     val scoreboard: Scoreboard?,
     val startDate: String?,
     val startTime: String?,
@@ -22,7 +23,7 @@ fun Match.mapToEntity() = MatchEntity(
     this.id,
     this.team1.mapToEntity(),
     this.team2.mapToEntity(),
-    this.status,
+    this.status.toString(),
     this.scoreboard?.mapToEntity(),
     this.startDate,
     this.startTime,

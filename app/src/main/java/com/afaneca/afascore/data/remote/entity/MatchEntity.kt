@@ -1,5 +1,6 @@
 package com.afaneca.afascore.data.remote.entity
 
+import com.afaneca.afascore.common.Constants
 import com.afaneca.afascore.domain.model.Match
 import com.afaneca.afascore.domain.model.Scoreboard
 import com.afaneca.afascore.domain.model.Team
@@ -50,9 +51,18 @@ fun MatchEntity.mapToDomain() =
         id,
         team1.mapToDomain(),
         team2.mapToDomain(),
-        status,
+        mapStatusToDomain(status),
         scoreboard?.mapToDomain(),
         startDate,
         startTime,
         leagueDivision
     )
+
+fun mapStatusToDomain(status: String): Constants.GameStatus {
+    return when(status){
+        Constants.GameStatus.NotStarted.toString() -> Constants.GameStatus.NotStarted
+        Constants.GameStatus.Ongoing.toString() -> Constants.GameStatus.Ongoing
+        Constants.GameStatus.Finished.toString() -> Constants.GameStatus.Finished
+        else -> Constants.GameStatus.Unknown
+    }
+}

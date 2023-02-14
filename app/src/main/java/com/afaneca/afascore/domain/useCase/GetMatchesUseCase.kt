@@ -1,5 +1,6 @@
 package com.afaneca.afascore.domain.useCase
 
+import com.afaneca.afascore.common.Constants
 import com.afaneca.afascore.common.Resource
 import com.afaneca.afascore.domain.model.Match
 import com.afaneca.afascore.domain.model.Scoreboard
@@ -21,6 +22,7 @@ class GetMatchesUseCase @Inject constructor(
     private val repository: MatchesRepository
 ) {
     operator fun invoke(): Flow<Resource<List<Match>>> = flow {
+        // TODO bind remote data
         /*emit(Resource.Loading())
         *//*emit(repository.getMatches())*//*
         delay(1000)*/
@@ -28,13 +30,18 @@ class GetMatchesUseCase @Inject constructor(
             Resource.Success<List<Match>>(
                 listOf(
                     Match(
-                        "1", Team("FC Pampilhosa", "FCP", null),
-                        Team("GD Calvão", "GDC", null), "ONGOING", Scoreboard(1, 1),
+                        "2", Team("AD Nogueira Regedoura", "ADNR", "https://www.afatv.pt/img/equipas/nogueira_da_regedoura.png"),
+                        Team("SC Esmoriz", "SCE", "https://www.afatv.pt/img/equipas/esmoriz.png"), Constants.GameStatus.NotStarted, Scoreboard(1, 3),
                         "18 de Fevereiro de 2023", "15:00", "1ª Divisão Distrital"
                     ),
                     Match(
-                        "2", Team("Juve Force Pte de Vagos", "JVF", null),
-                        Team("GD Mealhada", "GDM", null), "FINISHED", Scoreboard(1, 3),
+                        "1", Team("AR Aguinense", "ARA", "https://www.afatv.pt/img/equipas/aguinense.png"),
+                        Team("GD Mealhada", "GDM", "https://www.afatv.pt/img/equipas/gdmealhada.png"), Constants.GameStatus.Ongoing, Scoreboard(1, 1),
+                        "18 de Fevereiro de 2023", "15:00", "1ª Divisão Distrital"
+                    ),
+                    Match(
+                        "2", Team("SC Bustelo", "SCB", "https://www.afatv.pt/img/equipas/bustelo.png"),
+                        Team("CCR Válega", "CCRV", "https://www.afatv.pt/img/equipas/valega.png"), Constants.GameStatus.Finished, Scoreboard(1, 3),
                         "18 de Fevereiro de 2023", "15:00", "1ª Divisão Distrital"
                     )
                 )
