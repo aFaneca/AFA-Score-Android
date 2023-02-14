@@ -4,4 +4,5 @@
     <string name="game_status_not_started">Agendado</string>
     <string name="game_status_ongoing">Ao vivo</string>
     <string name="game_status_finished">Terminado</string>
+    <string name="game_list_empty">Sem jogos agendados</string>
 </resources>

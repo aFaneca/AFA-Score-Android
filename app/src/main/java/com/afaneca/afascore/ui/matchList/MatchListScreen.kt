@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.afaneca.afascore.ui.matchList.components.EmptyView
 import com.afaneca.afascore.ui.matchList.components.MatchListItem
 
 /**
@@ -22,15 +23,14 @@ fun MatchListScreen(
 ){
     val state by viewModel.state.collectAsState()
     Box(modifier = Modifier.fillMaxSize()){
-        state.matchList?.let { matchList ->
+        if(state.matchList.isNullOrEmpty()){
+            EmptyView()
+        } else {
             LazyColumn(modifier = Modifier.fillMaxSize()){
-                items(matchList){match ->
+                items(state.matchList!!){ match ->
                     MatchListItem(match = match)
                 }
             }
-        } ?: run {
-            // TOOD - empty view
         }
-
     }
 }
