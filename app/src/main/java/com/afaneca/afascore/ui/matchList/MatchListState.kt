@@ -9,5 +9,6 @@ import com.afaneca.afascore.ui.model.MatchUiModel
 data class MatchListState(
     val isLoading: Boolean = false,
     val matchList: List<MatchUiModel>? = null,
-    val error: String? = null
+    val error: String? = null,
+    val isFiltering: Boolean = false
 )

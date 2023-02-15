@@ -1,8 +1,8 @@
 package com.afaneca.afascore.ui.matchList.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,16 +16,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,10 +38,7 @@ import com.afaneca.afascore.common.Constants
 import com.afaneca.afascore.ui.model.MatchUiModel
 import com.afaneca.afascore.ui.model.ScoreboardUiModel
 import com.afaneca.afascore.ui.model.TeamUiModel
-import com.afaneca.afascore.ui.theme.DarkGreen
-import com.afaneca.afascore.ui.theme.Pink40
-import com.afaneca.afascore.ui.theme.Purple40
-import com.afaneca.afascore.ui.theme.Purple80
+import com.afaneca.afascore.ui.theme.Colors
 import com.afaneca.afascore.ui.theme.Typography
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
@@ -53,80 +51,101 @@ import com.skydoves.landscapist.glide.GlideImage
 fun MatchListItem(
     match: MatchUiModel
 ) {
-    Card(modifier = Modifier.padding(10.dp),
-        /*colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)*/) {
+    val (isSelected, setSelected) = rememberSaveable { mutableStateOf(false) }
+    Card(
+        modifier = Modifier.padding(10.dp),
+    ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxSize()
+                .clickable { setSelected(!isSelected) }
+                .run {
+                    if (!isSelected) this
+                    else {
+                        background(
+                            /*MaterialTheme.colorScheme.secondary*/
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Colors.Green,
+                                    Colors.DarkGreen
+                                )
+                            )
+                        )
+                    }
+                }
         ) {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                textAlign = TextAlign.Center,
-                text = "${match.leagueDivision} (${match.startDate})",
-                style = Typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            GameStatus(match.status)
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-                .height(IntrinsicSize.Min),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            /* TEAM 1 */
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start,
-            ) {
-                TeamItem(match.team1)
-            }
-            /* SCORE */
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    /*.background(MaterialTheme.colorScheme.secondaryContainer)*/
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
-                    shape = RoundedCornerShape(20.dp),
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    textAlign = TextAlign.Center,
+                    text = "${match.leagueDivision} (${match.startDate})",
+                    style = Typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                GameStatus(match.status)
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .height(IntrinsicSize.Min),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                /* TEAM 1 */
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start,
                 ) {
-                    Box(modifier = Modifier.padding(20.dp)) {
-                        when (match.status) {
-                            is Constants.GameStatus.NotStarted -> {
-                                GameTime(match.startTime ?: "?")
-                            }
+                    TeamItem(match.team1)
+                }
+                /* SCORE */
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        /*.background(MaterialTheme.colorScheme.secondaryContainer)*/
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+                        shape = RoundedCornerShape(20.dp),
+                    ) {
+                        Box(modifier = Modifier.padding(20.dp)) {
+                            when (match.status) {
+                                is Constants.GameStatus.NotStarted -> {
+                                    GameTime(match.startTime ?: "?")
+                                }
 
-                            is Constants.GameStatus.Ongoing -> {
-                                match.scoreboard?.let { ScoreboardItem(it) }
-                            }
+                                is Constants.GameStatus.Ongoing -> {
+                                    match.scoreboard?.let { ScoreboardItem(it) }
+                                }
 
-                            is Constants.GameStatus.Finished -> {
-                                match.scoreboard?.let { ScoreboardItem(it) }
-                            }
+                                is Constants.GameStatus.Finished -> {
+                                    match.scoreboard?.let { ScoreboardItem(it) }
+                                }
 
-                            else -> {}
+                                else -> {}
+                            }
                         }
                     }
                 }
-            }
-            /* TEAM 2*/
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.End
-            ) {
-                TeamItem(match.team2)
+                /* TEAM 2*/
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.End
+                ) {
+                    TeamItem(match.team2)
+                }
             }
         }
     }
@@ -141,17 +160,17 @@ fun GameStatus(
     when (matchStatus) {
         Constants.GameStatus.NotStarted -> {
             statusText = stringResource(id = R.string.game_status_not_started)
-            bgColor = Pink40
+            bgColor = Colors.Purple40
         }
 
         Constants.GameStatus.Ongoing -> {
             statusText = stringResource(id = R.string.game_status_ongoing)
-            bgColor = DarkGreen
+            bgColor = Colors.DarkGreen
         }
 
         Constants.GameStatus.Finished -> {
             statusText = stringResource(id = R.string.game_status_finished)
-            bgColor = Purple40
+            bgColor = Colors.Pink40
         }
 
         else -> {}

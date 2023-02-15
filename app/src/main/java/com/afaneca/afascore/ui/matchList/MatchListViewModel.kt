@@ -49,4 +49,12 @@ class MatchListViewModel @Inject constructor(
     fun onRefreshClicked() {
         getMatchList()
     }
+
+    fun onFilterClicked() {
+        _state.value = _state.value.copy(isFiltering = true)
+    }
+
+    fun onFilterDismiss(){
+        _state.value = _state.value.copy(isFiltering = false)
+    }
 }

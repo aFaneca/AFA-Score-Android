@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,7 +35,7 @@ fun AppBar(
         actions = {
             // filter icon
             TopAppBarActionButton(
-                imageVector = Icons.Default.Edit,
+                imageVector = Icons.Default.Search,
                 description = context.getString(R.string.filter),
                 onClick = { onActionClick(AppBarAction.FilterAction) }
             )

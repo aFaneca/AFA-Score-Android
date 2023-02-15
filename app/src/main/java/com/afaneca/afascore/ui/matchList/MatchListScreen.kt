@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.afaneca.afascore.ui.components.AppBarAction
 import com.afaneca.afascore.ui.matchList.components.EmptyView
+import com.afaneca.afascore.ui.matchList.components.FilterBottomSheetLayout
 import com.afaneca.afascore.ui.matchList.components.MatchListItem
 import com.afaneca.afascore.ui.model.MatchUiModel
 
@@ -33,8 +34,12 @@ fun MatchListScreen(
 
     LaunchedEffect(Unit) {
         setActionOnClick {
-            when(it){
+            when (it) {
                 is AppBarAction.RefreshAction -> viewModel.onRefreshClicked()
+                is AppBarAction.FilterAction -> {
+                    viewModel.onFilterClicked()
+                }
+
                 else -> {}
             }
         }
@@ -45,10 +50,14 @@ fun MatchListScreen(
     } else if (state.matchList != null) {
         MatchList(state.matchList!!)
     }
+
+    if (state.isFiltering) {
+        FilterBottomSheetLayout { viewModel.onFilterDismiss() }
+    }
 }
 
 @Composable
-fun MatchList(matchList: List<MatchUiModel>){
+fun MatchList(matchList: List<MatchUiModel>) {
     Box(modifier = Modifier.fillMaxSize()) {
         if (matchList.isEmpty()) {
             EmptyView()
