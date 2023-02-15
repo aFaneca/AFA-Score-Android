@@ -10,21 +10,18 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.afaneca.afascore.R
 import com.afaneca.afascore.ui.components.AppBar
+import com.afaneca.afascore.ui.components.AppBarAction
 import com.afaneca.afascore.ui.matchList.MatchListScreen
 import com.afaneca.afascore.ui.theme.AFAScoreTheme
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,17 +31,28 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
+            val (actionOnClick, setActionOnClick) = remember { mutableStateOf<((action: AppBarAction) -> Unit)?>(null) }
             AFAScoreTheme {
                 Scaffold(
-                    topBar = { AppBar(navController, this) },
-                    content = { innerPadding -> AppBody(navController, innerPadding) }
+                    topBar = { AppBar(this) { action -> actionOnClick?.invoke(action) } },
+                    content = { innerPadding ->
+                        AppBody(
+                            navController,
+                            innerPadding,
+                            setActionOnClick
+                        )
+                    }
                 )
             }
         }
     }
 
     @Composable
-    fun AppBody(navController: NavHostController, innerPadding: PaddingValues) {
+    fun AppBody(
+        navController: NavHostController,
+        innerPadding: PaddingValues,
+        setActionOnClick: (((action: AppBarAction) -> Unit)?) -> Unit
+    ) {
 
         Surface(
             modifier = Modifier
@@ -59,7 +67,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 composable(
                     route = Screen.MatchListScreen.route
-                ) { MatchListScreen(navController) }
+                ) { MatchListScreen(navController, setActionOnClick = setActionOnClick) }
             }
         }
     }

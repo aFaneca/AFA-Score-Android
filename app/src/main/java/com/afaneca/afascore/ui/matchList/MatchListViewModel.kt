@@ -1,7 +1,5 @@
 package com.afaneca.afascore.ui.matchList
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.afaneca.afascore.common.Resource
@@ -34,11 +32,11 @@ class MatchListViewModel @Inject constructor(
             when (it) {
                 is Resource.Success -> {
                     _state.value =
-                        _state.value.copy(matchList = (it.data?.map { item -> item.mapToUi() }))
+                        _state.value.copy(isLoading = false, matchList = (it.data?.map { item -> item.mapToUi() }))
                 }
 
                 is Resource.Error -> {
-                    _state.value = _state.value.copy(error = it.message)
+                    _state.value = _state.value.copy(isLoading = false, error = it.message)
                 }
 
                 is Resource.Loading -> {
@@ -46,5 +44,9 @@ class MatchListViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun onRefreshClicked() {
+        getMatchList()
     }
 }
