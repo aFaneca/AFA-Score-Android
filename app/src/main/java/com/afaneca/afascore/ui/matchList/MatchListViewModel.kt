@@ -32,7 +32,11 @@ class MatchListViewModel @Inject constructor(
             when (it) {
                 is Resource.Success -> {
                     _state.value =
-                        _state.value.copy(isLoading = false, matchList = (it.data?.map { item -> item.mapToUi() }))
+                        _state.value.copy(
+                            isLoading = false,
+                            matchList = (it.data?.matchList?.map { item -> item.mapToUi() }),
+                            filterData = it.data?.filterData?.mapToUi()
+                        )
                 }
 
                 is Resource.Error -> {
@@ -54,7 +58,7 @@ class MatchListViewModel @Inject constructor(
         _state.value = _state.value.copy(isFiltering = true)
     }
 
-    fun onFilterDismiss(){
+    fun onFilterDismiss() {
         _state.value = _state.value.copy(isFiltering = false)
     }
 }

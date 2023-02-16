@@ -6,4 +6,7 @@
     <string name="game_status_ongoing">Ao vivo</string>
     <string name="game_status_finished">Terminado</string>
     <string name="game_list_empty">Sem jogos agendados</string>
+    <string name="filter_by_team">Equipas</string>
+    <string name="filter_by_competitions">Competições</string>
+    <string name="filter_by_status">Estado</string>
 </resources>

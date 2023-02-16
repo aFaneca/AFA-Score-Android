@@ -51,8 +51,15 @@ fun MatchListScreen(
         MatchList(state.matchList!!)
     }
 
-    if (state.isFiltering) {
-        FilterBottomSheetLayout { viewModel.onFilterDismiss() }
+    if (state.isFiltering && state.filterData != null) {
+        FilterBottomSheetLayout(
+            filterDataUiModel = state.filterData!!,
+            onFilterClick = { teams, competitions ->
+                {
+                    // TODO
+                }
+            },
+            onDismiss = { viewModel.onFilterDismiss() })
     }
 }
 

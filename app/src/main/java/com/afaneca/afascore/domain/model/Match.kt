@@ -19,17 +19,6 @@ data class Match(
     val leagueDivision: String?,
 )
 
-fun Match.mapToEntity() = MatchEntity(
-    this.id,
-    this.team1.mapToEntity(),
-    this.team2.mapToEntity(),
-    this.status.toString(),
-    this.scoreboard?.mapToEntity(),
-    this.startDate,
-    this.startTime,
-    this.leagueDivision
-)
-
 fun Match.mapToUi() =
     MatchUiModel(
         this.id,

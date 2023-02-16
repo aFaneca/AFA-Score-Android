@@ -25,7 +25,7 @@ fun BottomSheetLayout(
 ) {
     val sheetState = rememberSheetState(
         skipHalfExpanded = false,
-        confirmValueChange = { it != SheetValue.Collapsed }
+        /*confirmValueChange = { it != SheetValue.Collapsed }*/
     )
     val coroutineScope = rememberCoroutineScope()
 
