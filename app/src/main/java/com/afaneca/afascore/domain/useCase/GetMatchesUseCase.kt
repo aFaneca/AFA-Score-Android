@@ -1,6 +1,5 @@
 package com.afaneca.afascore.domain.useCase
 
-import com.afaneca.afascore.R
 import com.afaneca.afascore.common.Constants
 import com.afaneca.afascore.common.Resource
 import com.afaneca.afascore.domain.model.FilterData
@@ -11,9 +10,13 @@ import com.afaneca.afascore.domain.model.Match
 import com.afaneca.afascore.domain.model.MatchListWrapper
 import com.afaneca.afascore.domain.model.Scoreboard
 import com.afaneca.afascore.domain.model.Team
+import com.afaneca.afascore.domain.repository.FilterRepository
 import com.afaneca.afascore.domain.repository.MatchesRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
+import timber.log.Timber
 import java.util.HashSet
 
 import javax.inject.Inject
@@ -22,9 +25,11 @@ import javax.inject.Inject
  * Created by António Faneca on 2/13/2023.
  */
 class GetMatchesUseCase @Inject constructor(
-    private val repository: MatchesRepository
+    private val matchesRepository: MatchesRepository,
+    private val filtersRepository: FilterRepository,
+    private val getReconciledFiltersUseCase: GetReconciledFiltersUseCase
 ) {
-    operator fun invoke(): Flow<Resource<MatchListWrapper>> = flow {
+    suspend operator fun invoke(): Flow<Resource<MatchListWrapper>> = flow {
         // TODO fetch remote data
         /*emit(Resource.Loading())
         *//*emit(repository.getMatches())*//*
@@ -65,34 +70,7 @@ class GetMatchesUseCase @Inject constructor(
                 "1ª Divisão Distrital"
             )
         )
-
-        val filterData = getFilterData(list)
-
+        val filterData = getReconciledFiltersUseCase(list)
         emit(Resource.Success(MatchListWrapper(list, filterData)))
-    }
-
-    /**
-     * Loops through the match [list] to find unique team and competition items
-     * and bundles them in a [FilterData] object
-     */
-    private fun getFilterData(list: MutableList<Match>): FilterData {
-        val teamSet = HashSet<String>()
-        val competitionSet = HashSet<String>()
-
-        for (match in list) {
-            teamSet.add(match.team1.fullName)
-            teamSet.add(match.team2.fullName)
-            match.leagueDivision?.let { competitionSet.add(it) }
-        }
-
-        return FilterData(
-            teamsList = teamSet.map { FilterableTeam(it, true) },
-            competitionsList = competitionSet.map { FilterableCompetition(it, true) },
-            statusList = listOf(
-                FilterableStatus(Constants.GameStatus.NotStarted),
-                FilterableStatus(Constants.GameStatus.Ongoing),
-                FilterableStatus(Constants.GameStatus.Finished),
-            )
-        )
     }
 }

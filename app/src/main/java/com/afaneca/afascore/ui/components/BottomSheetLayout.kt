@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberSheetState
 import androidx.compose.runtime.Composable
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun BottomSheetLayout(
     isToShow: Boolean = true,
-    content: @Composable() (ColumnScope.() -> Unit),
+    content: @Composable() (ColumnScope.(sheetState: SheetState) -> Unit),
     onDismiss: () -> Unit
 ) {
     val sheetState = rememberSheetState(
@@ -38,7 +39,7 @@ fun BottomSheetLayout(
         sheetState = sheetState,
         modifier = Modifier.fillMaxSize(),
         onDismissRequest = { onDismiss() },
-        content = { content() },
+        content = { content(sheetState) },
     )
 
     LaunchedEffect(key1 = isToShow) {

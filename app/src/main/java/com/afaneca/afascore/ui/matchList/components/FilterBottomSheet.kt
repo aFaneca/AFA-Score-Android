@@ -11,8 +11,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -20,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,30 +37,46 @@ import com.afaneca.afascore.ui.matchList.FilterDataUiModel
 import com.afaneca.afascore.ui.matchList.FilterableCompetitionUiModel
 import com.afaneca.afascore.ui.matchList.FilterableStatusUiModel
 import com.afaneca.afascore.ui.matchList.FilterableTeamUiModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * Created by António Faneca on 2/15/2023.
  */
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterBottomSheetLayout(
     filterDataUiModel: FilterDataUiModel,
     isToShow: Boolean = true,
-    onFilterClick: (teams: List<FilterableTeamUiModel>, competitions: List<FilterableCompetitionUiModel>) -> Unit,
+    onFilterClick: (
+        teams: List<FilterableTeamUiModel>, competitions: List<FilterableCompetitionUiModel>,
+        statuses: List<FilterableStatusUiModel>
+    ) -> Unit,
     onDismiss: () -> Unit
 ) {
     BottomSheetLayout(
         isToShow = isToShow,
-        content = { FilterBottomSheetView(filterDataUiModel, onFilterClick) },
+        content = { sheetState ->
+            FilterBottomSheetView(
+                sheetState,
+                filterDataUiModel,
+                onFilterClick
+            )
+        },
         onDismiss = { onDismiss() })
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FilterBottomSheetView(
+    sheetState: SheetState,
     filterDataUiModel: FilterDataUiModel,
-    onFilterClick: (teams: List<FilterableTeamUiModel>, competitions: List<FilterableCompetitionUiModel>) -> Unit
-) {
+    onFilterClick: (teams: List<FilterableTeamUiModel>, competitions: List<FilterableCompetitionUiModel>, statuses: List<FilterableStatusUiModel>) -> Unit,
+
+    ) {
     var selectedTabIndex by remember { mutableStateOf(0) }
+    val coroutineScope = rememberCoroutineScope()
     val tabTitles = listOf(
         stringResource(id = R.string.filter_by_team),
         stringResource(id = R.string.filter_by_competitions),
@@ -81,7 +100,10 @@ private fun FilterBottomSheetView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedButton(
-            onClick = { onFilterClick(teams, competitions) }) {
+            onClick = {
+                onFilterClick(teams, competitions, statuses)
+                coroutineScope.launch { sheetState.hide() }
+            }) {
             Text(text = stringResource(id = R.string.filter))
         }
         TabRow(selectedTabIndex = selectedTabIndex) {

@@ -10,8 +10,12 @@ data class Team(
     val fullName: String,
     val shortName: String?,
     val logoUrl: String?,
-)
+) {
+    companion object {
+        fun mapFromUi(uiModel: TeamUiModel) =
+            Team(uiModel.fullName, uiModel.shortName, uiModel.logoUrl)
+    }
+}
 
 
-fun Team.mapToEntity() = TeamEntity(this.fullName, this.shortName, this.logoUrl)
 fun Team.mapToUi() = TeamUiModel(this.fullName, this.shortName, this.logoUrl)

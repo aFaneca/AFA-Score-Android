@@ -54,10 +54,8 @@ fun MatchListScreen(
     if (state.isFiltering && state.filterData != null) {
         FilterBottomSheetLayout(
             filterDataUiModel = state.filterData!!,
-            onFilterClick = { teams, competitions ->
-                {
-                    // TODO
-                }
+            onFilterClick = { teams, competitions, statuses ->
+                viewModel.onFilterApplyClicked(teams, competitions, statuses)
             },
             onDismiss = { viewModel.onFilterDismiss() })
     }
