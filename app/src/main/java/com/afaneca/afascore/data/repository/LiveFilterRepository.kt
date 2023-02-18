@@ -1,16 +1,12 @@
 package com.afaneca.afascore.data.repository
 
-import androidx.datastore.preferences.core.edit
 import com.afaneca.afascore.data.local.FilterDataStorePreferences
-import com.afaneca.afascore.data.remote.entity.FilterDataEntity
-import com.afaneca.afascore.data.remote.entity.mapToDomain
+import com.afaneca.afascore.data.local.entity.FilterDataEntity
+import com.afaneca.afascore.data.local.entity.mapToDomain
 import com.afaneca.afascore.domain.model.FilterData
 import com.afaneca.afascore.domain.repository.FilterRepository
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 

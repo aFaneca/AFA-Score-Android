@@ -30,47 +30,14 @@ class GetMatchesUseCase @Inject constructor(
     private val getReconciledFiltersUseCase: GetReconciledFiltersUseCase
 ) {
     suspend operator fun invoke(): Flow<Resource<MatchListWrapper>> = flow {
-        // TODO fetch remote data
-        /*emit(Resource.Loading())
-        *//*emit(repository.getMatches())*//*
-        delay(1000)*/
-        val list = mutableListOf(
-            Match(
-                "2",
-                Team(
-                    "AD Nogueira Regedoura",
-                    "ADNR",
-                    "https://www.afatv.pt/img/equipas/nogueira_da_regedoura.png"
-                ),
-                Team("SC Esmoriz", "SCE", "https://www.afatv.pt/img/equipas/esmoriz.png"),
-                Constants.GameStatus.NotStarted,
-                Scoreboard(1, 3),
-                "18 de Fevereiro de 2023",
-                "15:00",
-                "1ª Divisão Distrital"
-            ),
-            Match(
-                "1",
-                Team("AR Aguinense", "ARA", "https://www.afatv.pt/img/equipas/aguinense.png"),
-                Team("GD Mealhada", "GDM", "https://www.afatv.pt/img/equipas/gdmealhada.png"),
-                Constants.GameStatus.Ongoing,
-                Scoreboard(1, 1),
-                "18 de Fevereiro de 2023",
-                "15:00",
-                "1ª Divisão Distrital"
-            ),
-            Match(
-                "2",
-                Team("SC Bustelo", "SCB", "https://www.afatv.pt/img/equipas/bustelo.png"),
-                Team("CCR Válega", "CCRV", "https://www.afatv.pt/img/equipas/valega.png"),
-                Constants.GameStatus.Finished,
-                Scoreboard(1, 3),
-                "18 de Fevereiro de 2023",
-                "15:00",
-                "1ª Divisão Distrital"
-            )
-        )
-        val filterData = getReconciledFiltersUseCase(list)
-        emit(Resource.Success(MatchListWrapper(list, filterData)))
+        emit(Resource.Loading())
+        val response = matchesRepository.getMatches()
+        if (response is Resource.Success) {
+            response.data?.let {
+                val filterData = getReconciledFiltersUseCase(it)
+                emit(Resource.Success(MatchListWrapper(response.data, filterData)))
+            }
+
+        } else emit(Resource.Error("", null))
     }
 }

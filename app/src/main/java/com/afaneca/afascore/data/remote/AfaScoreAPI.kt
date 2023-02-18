@@ -9,6 +9,6 @@ import retrofit2.http.GET
  */
 interface AfaScoreAPI {
 
-    @GET("/${API_VERSION}/matches")
+    @GET("${API_VERSION}/matches")
     suspend fun getMatches(): List<MatchEntity>
 }

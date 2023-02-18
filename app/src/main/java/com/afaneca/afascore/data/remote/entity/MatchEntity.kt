@@ -24,7 +24,7 @@ data class MatchEntity(
     val startDate: String?,
     @SerializedName("startTime")
     val startTime: String?,
-    @SerializedName("leagueDivision")
+    @SerializedName("competition")
     val leagueDivision: String?,
 )
 

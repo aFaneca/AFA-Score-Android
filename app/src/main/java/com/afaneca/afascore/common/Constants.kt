@@ -1,12 +1,14 @@
 package com.afaneca.afascore.common
 
+import com.afaneca.afascore.BuildConfig
+
 /**
  * Created by António Faneca on 2/13/2023.
  */
 object Constants {
 
     const val API_VERSION = "v1"
-    const val API_BASE_URL = "https://afascore.afaneca.com/api/"
+    const val API_BASE_URL = BuildConfig.AFA_SCORE_API_BASE_URL
 
     sealed class GameStatus(val statusTag: String) {
         object NotStarted : GameStatus("NOT_STARTED")
