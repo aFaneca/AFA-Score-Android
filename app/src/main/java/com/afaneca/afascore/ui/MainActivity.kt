@@ -24,7 +24,9 @@ import com.afaneca.afascore.ui.components.AppBar
 import com.afaneca.afascore.ui.components.AppBarAction
 import com.afaneca.afascore.ui.matchList.MatchListScreen
 import com.afaneca.afascore.ui.theme.AFAScoreTheme
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,7 +35,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            val (actionOnClick, setActionOnClick) = remember { mutableStateOf<((action: AppBarAction) -> Unit)?>(null) }
+            val (actionOnClick, setActionOnClick) = remember {
+                mutableStateOf<((action: AppBarAction) -> Unit)?>(
+                    null
+                )
+            }
             AFAScoreTheme {
                 Scaffold(
                     topBar = { AppBar(this) { action -> actionOnClick?.invoke(action) } },
@@ -47,6 +53,8 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { Timber.d("PushNotification KEY: " + it.result) }
     }
 
     @Composable

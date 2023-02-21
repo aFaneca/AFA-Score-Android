@@ -56,13 +56,15 @@ android {
             dimension "environment"
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
-            buildConfigField "String", "AFA_SCORE_API_BASE_URL", '"https://29a3-89-114-90-116.ngrok.io/api/"'
+            buildConfigField "String", "AFA_SCORE_API_BASE_URL", '"https://8b8b-89-114-90-116.ngrok.io/api/"'
+            resValue "string", "app_name", "@string/app_name_dev"
         }
 
         prod {
             dimension "environment"
             buildConfigField "String", "AFA_SCORE_API_BASE_URL", '"https://afascore.afaneca.com/api/"'
             signingConfig signingConfigs.release
+            resValue "string", "app_name", "@string/app_name_prod"
         }
     }
 
