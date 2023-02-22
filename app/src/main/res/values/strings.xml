@@ -10,4 +10,6 @@
     <string name="filter_by_team">Equipas</string>
     <string name="filter_by_competitions">Competições</string>
     <string name="filter_by_status">Estado</string>
+    <string name="notification_channel_name">Atualização de jogos</string>
+    <string name="notification_channel_description">Notificação de mudança no estado e resultado dos jogos subscritos</string>
 </resources>
