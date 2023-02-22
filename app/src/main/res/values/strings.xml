@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">AFA Score</string>
+    <string name="app_name_prod">AFA Score</string>
+    <string name="app_name_dev">AFA Score.dev</string>
     <string name="refresh">Atualizar</string>
     <string name="filter">Filtrar</string>
     <string name="game_status_not_started">Agendado</string>
@@ -9,4 +10,7 @@
     <string name="filter_by_team">Equipas</string>
     <string name="filter_by_competitions">Competições</string>
     <string name="filter_by_status">Estado</string>
+    <string name="notification_channel_name">Atualização de jogos</string>
+    <string name="notification_channel_description">Notificação de mudança no estado e resultado dos jogos subscritos</string>
+    <string name="reset_filters_cta">Limpar os filtros</string>
 </resources>

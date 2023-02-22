@@ -1,6 +1,7 @@
 package com.afaneca.afascore.di
 
 import android.content.Context
+import com.afaneca.afascore.BuildConfig
 import com.afaneca.afascore.common.Constants
 import com.afaneca.afascore.data.local.FilterDataStorePreferences
 import com.afaneca.afascore.data.remote.AfaScoreAPI
@@ -8,7 +9,6 @@ import com.afaneca.afascore.data.repository.LiveFilterRepository
 import com.afaneca.afascore.data.repository.LiveMatchesRepository
 import com.afaneca.afascore.domain.repository.FilterRepository
 import com.afaneca.afascore.domain.repository.MatchesRepository
-import com.google.firebase.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

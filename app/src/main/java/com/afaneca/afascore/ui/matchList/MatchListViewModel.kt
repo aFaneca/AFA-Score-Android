@@ -9,11 +9,14 @@ import com.afaneca.afascore.domain.useCase.GetReconciledFiltersUseCase
 import com.afaneca.afascore.domain.useCase.GetMatchesUseCase
 import com.afaneca.afascore.domain.useCase.SaveFiltersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -42,6 +45,7 @@ class MatchListViewModel @Inject constructor(
                             _state.value.copy(
                                 isLoading = false,
                                 matchList = (it.data?.matchList?.map { item -> item.mapToUi() }),
+                                filteredMatchList = (it.data?.filteredMatchList?.map { item -> item.mapToUi() }),
                                 filterData = it.data?.filterData?.mapToUi()
                             )
                     }
@@ -66,7 +70,7 @@ class MatchListViewModel @Inject constructor(
         // if list is null or empty, do nothing
         viewModelScope.launch {
             _state.value.matchList?.let { matchList ->
-                if(matchList.isEmpty()) return@launch
+                if (matchList.isEmpty() && _state.value.filterData?.teamsList?.isEmpty() != false) return@launch
                 val updatedFilterData =
                     getReconciledFiltersUseCase(matchList.map { Match.mapFromUi(it) })
                 _state.value =
@@ -87,6 +91,13 @@ class MatchListViewModel @Inject constructor(
         onFilterDismiss()
         viewModelScope.launch {
             saveFiltersUseCase(FilterDataUiModel(teams, competitions, statuses))
+            getMatchList()
+        }
+    }
+    fun resetFilters() {
+        viewModelScope.launch {
+            saveFiltersUseCase.resetFilters()
+            getMatchList()
         }
     }
 }
