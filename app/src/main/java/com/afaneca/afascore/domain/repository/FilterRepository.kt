@@ -8,5 +8,6 @@ import kotlinx.coroutines.flow.Flow
  */
 interface FilterRepository {
     suspend fun getFilterData(): FilterData?
+    suspend fun resetFilterData(): Boolean
     suspend fun saveFilterData(data: FilterData): Boolean
 }

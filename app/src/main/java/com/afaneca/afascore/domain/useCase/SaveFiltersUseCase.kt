@@ -15,4 +15,8 @@ class SaveFiltersUseCase @Inject constructor(
     suspend operator fun invoke(filterData: FilterDataUiModel): Boolean {
         return filtersRepository.saveFilterData(FilterData.mapFromDomain(filterData))
     }
+
+    suspend fun resetFilters() : Boolean {
+        return filtersRepository.resetFilterData()
+    }
 }

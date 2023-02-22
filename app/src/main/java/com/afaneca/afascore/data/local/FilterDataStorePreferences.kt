@@ -27,8 +27,12 @@ class FilterDataStorePreferences @Inject constructor(@ApplicationContext private
             prefs[FILTER_DATA]
         }
 
-    suspend fun saveFilterData(data: String){
-            context.dataStore.edit { prefs -> prefs[FILTER_DATA] = data }
+    suspend fun saveFilterData(data: String) {
+        context.dataStore.edit { prefs -> prefs[FILTER_DATA] = data }
+    }
+
+    suspend fun deleteFilterData() {
+        context.dataStore.edit { prefs -> prefs.remove(FILTER_DATA) }
     }
 
     companion object {

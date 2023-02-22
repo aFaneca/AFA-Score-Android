@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +24,7 @@ import com.afaneca.afascore.R
  */
 
 @Composable
-fun EmptyView() {
+fun EmptyView(hasFiltersApplied: Boolean, onResetFiltersClick: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -37,8 +38,15 @@ fun EmptyView() {
             alignment = Alignment.Center,
             colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground)
         )
-        Text(text = stringResource(id = R.string.game_list_empty),
-        modifier = Modifier.padding(30.dp))
+        Text(
+            text = stringResource(id = R.string.game_list_empty),
+            modifier = Modifier.padding(30.dp)
+        )
+        if (hasFiltersApplied) {
+            TextButton(onClick = onResetFiltersClick) {
+                Text(stringResource(id = R.string.reset_filters_cta))
+            }
+        }
     }
 
 }

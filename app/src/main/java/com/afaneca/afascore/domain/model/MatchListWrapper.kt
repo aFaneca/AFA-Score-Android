@@ -5,6 +5,7 @@ package com.afaneca.afascore.domain.model
  */
 data class MatchListWrapper(
     val matchList: List<Match>,
+    val filteredMatchList: List<Match>,
     val filterData: FilterData,
 )
 

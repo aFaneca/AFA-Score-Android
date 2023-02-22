@@ -26,7 +26,6 @@ import javax.inject.Inject
  */
 class GetMatchesUseCase @Inject constructor(
     private val matchesRepository: MatchesRepository,
-    private val filtersRepository: FilterRepository,
     private val getReconciledFiltersUseCase: GetReconciledFiltersUseCase
 ) {
     suspend operator fun invoke(): Flow<Resource<MatchListWrapper>> = flow {
@@ -35,9 +34,27 @@ class GetMatchesUseCase @Inject constructor(
         if (response is Resource.Success) {
             response.data?.let {
                 val filterData = getReconciledFiltersUseCase(it)
-                emit(Resource.Success(MatchListWrapper(response.data, filterData)))
+                val filteredMatches = getFilteredMatches(it, filterData)
+                emit(Resource.Success(MatchListWrapper(it, filteredMatches, filterData)))
             }
 
         } else emit(Resource.Error("", null))
+    }
+
+    private fun getFilteredMatches(matches: List<Match>, filterData: FilterData): List<Match> {
+        val filteredList = mutableListOf<Match>()
+        for (match in matches) {
+            val selectedCompetitions = filterData.competitionsList.filter { it.isSelected }
+            val selectedTeams = filterData.teamsList.filter { it.isSelected }
+            val selectedStatuses = filterData.statusList.filter { it.isSelected }
+
+            if (selectedCompetitions.firstOrNull { it.name == match.leagueDivision } != null
+                && selectedTeams.firstOrNull { it.name == match.team1.fullName || it.name == match.team2.fullName } != null
+                && selectedStatuses.firstOrNull { it.status == match.status } != null) {
+                filteredList.add(match)
+            }
+        }
+
+        return filteredList
     }
 }

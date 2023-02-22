@@ -32,9 +32,19 @@ class LiveFilterRepository @Inject constructor(
      * Returns true if save was successful
      */
     override suspend fun saveFilterData(data: FilterData): Boolean {
-        val filterDataStr = Gson().toJson(FilterDataEntity.mapFromDomain(data))
+        val filterDataStr = Gson().toJson(data?.let { FilterDataEntity.mapFromDomain(it) })
         return try {
             filterDataStore.saveFilterData(filterDataStr)
+            true
+        } catch (e: Exception) {
+            Timber.d(e)
+            false
+        }
+    }
+
+    override suspend fun resetFilterData(): Boolean {
+        return try {
+            filterDataStore.deleteFilterData()
             true
         } catch (e: Exception) {
             Timber.d(e)

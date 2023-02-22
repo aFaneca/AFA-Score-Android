@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,6 +21,7 @@ import com.afaneca.afascore.ui.matchList.components.EmptyView
 import com.afaneca.afascore.ui.matchList.components.FilterBottomSheetLayout
 import com.afaneca.afascore.ui.matchList.components.MatchListItem
 import com.afaneca.afascore.ui.model.MatchUiModel
+import kotlinx.coroutines.launch
 
 /**
  * Created by António Faneca on 2/13/2023.
@@ -28,9 +30,10 @@ import com.afaneca.afascore.ui.model.MatchUiModel
 fun MatchListScreen(
     navController: NavController,
     viewModel: MatchListViewModel = hiltViewModel(),
-    setActionOnClick: ((action: AppBarAction) -> Unit) -> Unit,
+    setActionOnClick: ((action: AppBarAction) -> Unit) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         setActionOnClick {
@@ -47,25 +50,34 @@ fun MatchListScreen(
 
     if (state.isLoading) {
         LoadingView()
-    } else if (state.matchList != null) {
-        MatchList(state.matchList!!)
+    } else if (state.filteredMatchList != null) {
+        MatchList(
+            state.filteredMatchList!!,
+            state.matchList?.size != state.filteredMatchList!!.size
+        ) { viewModel.resetFilters() }
     }
 
     if (state.isFiltering && state.filterData != null) {
         FilterBottomSheetLayout(
             filterDataUiModel = state.filterData!!,
             onFilterClick = { teams, competitions, statuses ->
-                viewModel.onFilterApplyClicked(teams, competitions, statuses)
+                coroutineScope.launch {
+                    viewModel.onFilterApplyClicked(
+                        teams,
+                        competitions,
+                        statuses
+                    )
+                }
             },
             onDismiss = { viewModel.onFilterDismiss() })
     }
 }
 
 @Composable
-fun MatchList(matchList: List<MatchUiModel>) {
+fun MatchList(matchList: List<MatchUiModel>, hasFilters: Boolean, onResetClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         if (matchList.isEmpty()) {
-            EmptyView()
+            EmptyView(hasFilters, onResetClick)
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(matchList) { match ->
