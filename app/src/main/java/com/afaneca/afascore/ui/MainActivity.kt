@@ -25,6 +25,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.afaneca.afascore.common.Constants
 import com.afaneca.afascore.ui.components.AppBar
 import com.afaneca.afascore.ui.components.AppBarAction
 import com.afaneca.afascore.ui.matchList.MatchListScreen
@@ -70,7 +71,10 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { Timber.d("PushNotification FCM KEY: " + it.result) }
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            Timber.d("PushNotification FCM KEY: " + it.result)
+            FirebaseMessaging.getInstance().subscribeToTopic(Constants.FCM_DEFAULT_TOPIC)
+        }
         askNotificationPermission()
     }
 
