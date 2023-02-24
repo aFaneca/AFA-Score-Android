@@ -17,6 +17,7 @@ data class Match(
     val startDate: String?,
     val startTime: String?,
     val leagueDivision: String?,
+    val hasRecentActivity: Boolean,
 ) {
     companion object {
         fun mapFromUi(uiModel: MatchUiModel) = Match(
@@ -27,7 +28,8 @@ data class Match(
             scoreboard = uiModel.scoreboard?.let { Scoreboard.mapFromUi(it) },
             startDate = uiModel.startDate,
             startTime = uiModel.startTime,
-            leagueDivision = uiModel.leagueDivision
+            leagueDivision = uiModel.leagueDivision,
+            hasRecentActivity = uiModel.hasRecentActivity,
         )
     }
 }
@@ -40,5 +42,6 @@ fun Match.mapToUi() = MatchUiModel(
     this.scoreboard?.mapToUi(),
     this.startDate,
     this.startTime,
-    this.leagueDivision
+    this.leagueDivision,
+    this.hasRecentActivity
 )

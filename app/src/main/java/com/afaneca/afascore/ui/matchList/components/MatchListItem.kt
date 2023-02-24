@@ -51,15 +51,14 @@ import com.skydoves.landscapist.glide.GlideImage
 fun MatchListItem(
     match: MatchUiModel
 ) {
-    val (isSelected, setSelected) = rememberSaveable { mutableStateOf(false) }
     Card(
         modifier = Modifier.padding(10.dp),
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
-                .clickable { setSelected(!isSelected) }
+                .clickable { /*setSelected(!isSelected)*/ }
                 .run {
-                    if (!isSelected) this
+                    if (!match.hasRecentActivity) this
                     else {
                         background(
                             /*MaterialTheme.colorScheme.secondary*/
@@ -257,7 +256,8 @@ fun MatchListItemPreview() {
             ScoreboardUiModel(1, 1),
             "",
             "",
-            ""
+            "",
+            false
         )
     )
 }

@@ -15,4 +15,5 @@ data class MatchUiModel(
     val startDate: String?,
     val startTime: String?,
     val leagueDivision: String?,
+    val hasRecentActivity: Boolean,
 )

@@ -30,7 +30,8 @@ import kotlinx.coroutines.launch
 fun MatchListScreen(
     navController: NavController,
     viewModel: MatchListViewModel = hiltViewModel(),
-    setActionOnClick: ((action: AppBarAction) -> Unit) -> Unit
+    setActionOnClick: ((action: AppBarAction) -> Unit) -> Unit,
+
 ) {
     val state by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
