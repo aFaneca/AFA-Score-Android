@@ -12,4 +12,4 @@ Android frontend for [AFA Score Scraper API](https://github.com/aFaneca/AFA-Scor
 
 |   Light Mode   |   Dark Mode   |   Filters   |
 |:-------------:|:-------------:|:-------------:|
-| ![](https://github.com/aFaneca/AFA-Score-Android/blob/develop/screenshots/light1.png?raw=true) |  ![](https://github.com/aFaneca/AFA-Score-Android/blob/develop/screenshots/dark1.png?raw=true) | ![](https://github.com/aFaneca/AFA-Score-Android/blob/develop/screenshots/dark_filter1.png?raw=true) |
+| ![](https://github.com/aFaneca/AFA-Score-Android/blob/develop/screenshots/phone_l1.png?raw=true) |  ![](https://github.com/aFaneca/AFA-Score-Android/blob/develop/screenshots/phone_b1.png?raw=true) | ![](https://github.com/aFaneca/AFA-Score-Android/blob/develop/screenshots/phone_b2.png?raw=true) |
