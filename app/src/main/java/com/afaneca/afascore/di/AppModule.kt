@@ -1,12 +1,17 @@
 package com.afaneca.afascore.di
 
 import android.content.Context
+import androidx.room.Room
 import com.afaneca.afascore.BuildConfig
 import com.afaneca.afascore.common.Constants
 import com.afaneca.afascore.data.local.FilterDataStorePreferences
+import com.afaneca.afascore.data.local.db.LocalDatabase
+import com.afaneca.afascore.data.local.db.favorites.FavoriteDao
 import com.afaneca.afascore.data.remote.AfaScoreAPI
+import com.afaneca.afascore.data.repository.LiveFavoritesRepository
 import com.afaneca.afascore.data.repository.LiveFilterRepository
 import com.afaneca.afascore.data.repository.LiveMatchesRepository
+import com.afaneca.afascore.domain.repository.FavoritesRepository
 import com.afaneca.afascore.domain.repository.FilterRepository
 import com.afaneca.afascore.domain.repository.MatchesRepository
 import dagger.Module
@@ -28,6 +33,7 @@ import javax.inject.Singleton
 object AppModule {
 
 
+    /* HTTP */
     @Provides
     @Singleton
     fun provideHttpClient(): OkHttpClient {
@@ -50,6 +56,17 @@ object AppModule {
         .create(AfaScoreAPI::class.java)
 
 
+    /* DATABASE */
+    @Provides
+    @Singleton
+    fun provideLocalDatabase(@ApplicationContext context: Context): LocalDatabase =
+        Room.databaseBuilder(context, LocalDatabase::class.java, "afascore-db").build()
+
+    @Provides
+    @Singleton
+    fun provideFavoriteDao(db: LocalDatabase) = db.favoriteDao()
+
+    /* REPOSITORIES */
     @Provides
     @Singleton
     fun provideMatchesRepository(api: AfaScoreAPI): MatchesRepository = LiveMatchesRepository(api)
@@ -58,4 +75,9 @@ object AppModule {
     @Singleton
     fun provideFilterRepository(filterDataStore: FilterDataStorePreferences): FilterRepository =
         LiveFilterRepository(filterDataStore)
+
+    @Provides
+    @Singleton
+    fun provideFavoritesRepository(favoriteDao: FavoriteDao): FavoritesRepository =
+        LiveFavoritesRepository(favoriteDao)
 }

@@ -1,23 +1,13 @@
 package com.afaneca.afascore.domain.useCase
 
-import com.afaneca.afascore.common.Constants
 import com.afaneca.afascore.common.Resource
 import com.afaneca.afascore.domain.model.FilterData
-import com.afaneca.afascore.domain.model.FilterableCompetition
-import com.afaneca.afascore.domain.model.FilterableStatus
-import com.afaneca.afascore.domain.model.FilterableTeam
 import com.afaneca.afascore.domain.model.Match
 import com.afaneca.afascore.domain.model.MatchListWrapper
-import com.afaneca.afascore.domain.model.Scoreboard
-import com.afaneca.afascore.domain.model.Team
-import com.afaneca.afascore.domain.repository.FilterRepository
+import com.afaneca.afascore.domain.repository.FavoritesRepository
 import com.afaneca.afascore.domain.repository.MatchesRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
-import timber.log.Timber
-import java.util.HashSet
 
 import javax.inject.Inject
 
@@ -26,16 +16,22 @@ import javax.inject.Inject
  */
 class GetMatchesUseCase @Inject constructor(
     private val matchesRepository: MatchesRepository,
-    private val getReconciledFiltersUseCase: GetReconciledFiltersUseCase
+    private val favoritesRepository: FavoritesRepository,
+    private val getReconciledFiltersUseCase: GetReconciledFiltersUseCase,
 ) {
     suspend operator fun invoke(): Flow<Resource<MatchListWrapper>> = flow {
         emit(Resource.Loading())
         val response = matchesRepository.getMatches()
         if (response is Resource.Success) {
             response.data?.let {
-                val filterData = getReconciledFiltersUseCase(it)
-                val filteredMatches = getFilteredMatches(it, filterData)
-                emit(Resource.Success(MatchListWrapper(it, filteredMatches, filterData)))
+                val updatedData = mutableListOf<Match>()
+                val favorites: List<String> = favoritesRepository.getFavorites() ?: emptyList()
+                for (match in it) {
+                    updatedData.add(match.copy(isFavorite = favorites.contains(match.id)))
+                }
+                val filterData = getReconciledFiltersUseCase(updatedData)
+                val filteredMatches = getFilteredMatches(updatedData, filterData)
+                emit(Resource.Success(MatchListWrapper(updatedData, filteredMatches, filterData)))
             }
 
         } else emit(Resource.Error("", null))

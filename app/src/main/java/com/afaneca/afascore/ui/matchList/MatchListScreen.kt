@@ -1,21 +1,19 @@
 package com.afaneca.afascore.ui.matchList
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import android.widget.Toast
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.afaneca.afascore.R
 import com.afaneca.afascore.ui.components.AppBarAction
 import com.afaneca.afascore.ui.matchList.components.EmptyView
 import com.afaneca.afascore.ui.matchList.components.FilterBottomSheetLayout
@@ -31,7 +29,6 @@ fun MatchListScreen(
     navController: NavController,
     viewModel: MatchListViewModel = hiltViewModel(),
     setActionOnClick: ((action: AppBarAction) -> Unit) -> Unit,
-
 ) {
     val state by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
@@ -52,10 +49,27 @@ fun MatchListScreen(
     if (state.isLoading) {
         LoadingView()
     } else if (state.filteredMatchList != null) {
+        val context = LocalContext.current
+        val favoriteStartMessage = stringResource(R.string.favorite_start_toast_message)
+        val favoriteStopMessage = stringResource(R.string.favorite_stop_toast_message)
+        if (state.isSneakyLoading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        }
         MatchList(
-            state.filteredMatchList!!,
-            state.matchList?.size != state.filteredMatchList!!.size
-        ) { viewModel.resetFilters() }
+            matchList = state.filteredMatchList!!,
+            hasFilters = state.matchList?.size != state.filteredMatchList!!.size,
+            onResetClick = { viewModel.resetFilters() },
+            onToggleFavoriteClick = { match ->
+                if (match.isFavorite) {
+                    // Will no longer be a favorite
+                    Toast.makeText(context, favoriteStopMessage, Toast.LENGTH_SHORT).show()
+                } else {
+                    // Is now a favorite
+                    Toast.makeText(context, favoriteStartMessage, Toast.LENGTH_SHORT).show()
+                }
+                viewModel.toggleFavorite(match)
+            }
+        )
     }
 
     if (state.isFiltering && state.filterData != null) {
@@ -75,14 +89,19 @@ fun MatchListScreen(
 }
 
 @Composable
-fun MatchList(matchList: List<MatchUiModel>, hasFilters: Boolean, onResetClick: () -> Unit) {
+fun MatchList(
+    matchList: List<MatchUiModel>,
+    hasFilters: Boolean,
+    onResetClick: () -> Unit,
+    onToggleFavoriteClick: (match: MatchUiModel) -> Unit,
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         if (matchList.isEmpty()) {
             EmptyView(hasFilters, onResetClick)
         } else {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(matchList) { match ->
-                    MatchListItem(match = match)
+                    MatchListItem(match = match, onToggleFavoriteClick)
                 }
             }
         }

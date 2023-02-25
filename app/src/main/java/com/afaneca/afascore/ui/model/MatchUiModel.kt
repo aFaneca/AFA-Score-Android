@@ -1,7 +1,6 @@
 package com.afaneca.afascore.ui.model
 
 import com.afaneca.afascore.common.Constants
-import com.google.gson.annotations.SerializedName
 
 /**
  * Created by António Faneca on 2/13/2023.
@@ -16,4 +15,5 @@ data class MatchUiModel(
     val startTime: String?,
     val leagueDivision: String?,
     val hasRecentActivity: Boolean,
+    val isFavorite: Boolean = false
 )
