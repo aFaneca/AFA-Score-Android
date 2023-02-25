@@ -2,6 +2,8 @@
 
 Android frontend for [AFA Score Scraper API](https://github.com/aFaneca/AFA-Score-Scraper-API).
 
+![](https://github.com/aFaneca/AFA-Score-Android/blob/main/screenshots/feature1.png?raw=true)
+
 # 🛠️ Arch
 - Native Android w/ **Kotlin**
 - **Jetpack Compose** for UI
