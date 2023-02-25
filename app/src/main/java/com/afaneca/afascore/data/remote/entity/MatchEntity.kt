@@ -26,6 +26,10 @@ data class MatchEntity(
     val startTime: String?,
     @SerializedName("competition")
     val leagueDivision: String?,
+    @SerializedName("hasRecentActivity")
+    val hasRecentActivity: Boolean,
+    @SerializedName("lastGameActivity")
+    val lastGameActivity: String?
 )
 
 data class TeamEntity(
@@ -55,11 +59,12 @@ fun MatchEntity.mapToDomain() =
         scoreboard?.mapToDomain(),
         startDate,
         startTime,
-        leagueDivision
+        leagueDivision,
+        hasRecentActivity
     )
 
 fun mapStatusToDomain(status: String): Constants.GameStatus {
-    return when(status){
+    return when (status) {
         Constants.GameStatus.NotStarted.toString() -> Constants.GameStatus.NotStarted
         Constants.GameStatus.Ongoing.toString() -> Constants.GameStatus.Ongoing
         Constants.GameStatus.Finished.toString() -> Constants.GameStatus.Finished

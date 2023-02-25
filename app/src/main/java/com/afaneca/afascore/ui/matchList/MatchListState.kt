@@ -1,6 +1,5 @@
 package com.afaneca.afascore.ui.matchList
 
-import androidx.annotation.StringRes
 import com.afaneca.afascore.common.Constants
 import com.afaneca.afascore.ui.model.MatchUiModel
 
@@ -9,6 +8,7 @@ import com.afaneca.afascore.ui.model.MatchUiModel
  */
 data class MatchListState(
     val isLoading: Boolean = false,
+    val isSneakyLoading: Boolean = false,
     val matchList: List<MatchUiModel>? = null,
     val filteredMatchList: List<MatchUiModel>? = null,
     val error: String? = null,

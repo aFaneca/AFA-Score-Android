@@ -3,25 +3,13 @@ package com.afaneca.afascore.ui.matchList.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.NotificationsOff
+import androidx.compose.material.icons.outlined.NotificationAdd
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -49,17 +37,17 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun MatchListItem(
-    match: MatchUiModel
+    match: MatchUiModel,
+    onToggleFavoriteClick: (match: MatchUiModel) -> Unit,
 ) {
-    val (isSelected, setSelected) = rememberSaveable { mutableStateOf(false) }
     Card(
         modifier = Modifier.padding(10.dp),
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
-                .clickable { setSelected(!isSelected) }
+                .clickable { /*setSelected(!isSelected)*/ }
                 .run {
-                    if (!isSelected) this
+                    if (!match.hasRecentActivity) this
                     else {
                         background(
                             /*MaterialTheme.colorScheme.secondary*/
@@ -76,6 +64,7 @@ fun MatchListItem(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                /* COMPETITION / DATE */
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -83,9 +72,36 @@ fun MatchListItem(
                     textAlign = TextAlign.Center,
                     text = "${match.leagueDivision} (${match.startDate})",
                     style = Typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = if (match.hasRecentActivity) Color.White else MaterialTheme.colorScheme.onSurface,
                 )
-                GameStatus(match.status)
+                /* GAME STATUS / NOTIFICATION CTA */
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    /*horizontalArrangement = Arrangement.Center*/
+                ) {
+                    Spacer(Modifier.weight(1f))
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        GameStatus(match.status)
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(8.dp),
+                        horizontalAlignment = Alignment.End
+                    ) {
+                        Icon(
+                            imageVector = if (match.isFavorite) Icons.Filled.NotificationsOff else Icons.Outlined.NotificationAdd,
+                            contentDescription = "",
+                            modifier = Modifier.clickable { onToggleFavoriteClick(match) }
+                        )
+                    }
+
+                }
+
             }
             Row(
                 modifier = Modifier
@@ -102,7 +118,7 @@ fun MatchListItem(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.Start,
                 ) {
-                    TeamItem(match.team1)
+                    TeamItem(match.team1, match.hasRecentActivity)
                 }
                 /* SCORE */
                 Column(
@@ -144,7 +160,7 @@ fun MatchListItem(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.End
                 ) {
-                    TeamItem(match.team2)
+                    TeamItem(match.team2, match.hasRecentActivity)
                 }
             }
         }
@@ -193,7 +209,8 @@ fun GameStatus(
 
 @Composable
 fun TeamItem(
-    team: TeamUiModel
+    team: TeamUiModel,
+    hasRecentActivity: Boolean
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -222,7 +239,8 @@ fun TeamItem(
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
-            style = Typography.labelMedium
+            style = Typography.labelMedium,
+            color = if (hasRecentActivity) Color.White else MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -257,7 +275,10 @@ fun MatchListItemPreview() {
             ScoreboardUiModel(1, 1),
             "",
             "",
-            ""
-        )
+            "",
+            false,
+            false
+        ),
+        {}
     )
 }

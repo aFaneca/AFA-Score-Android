@@ -9,6 +9,7 @@ object Constants {
 
     const val API_VERSION = "v1"
     const val API_BASE_URL = BuildConfig.AFA_SCORE_API_BASE_URL
+    const val FCM_DEFAULT_TOPIC = "livescores"
 
     sealed class GameStatus(val statusTag: String) {
         object NotStarted : GameStatus("NOT_STARTED")

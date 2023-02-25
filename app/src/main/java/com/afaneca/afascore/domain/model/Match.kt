@@ -1,9 +1,7 @@
 package com.afaneca.afascore.domain.model
 
 import com.afaneca.afascore.common.Constants
-import com.afaneca.afascore.data.remote.entity.MatchEntity
 import com.afaneca.afascore.ui.model.MatchUiModel
-import com.google.gson.annotations.SerializedName
 
 /**
  * Created by António Faneca on 2/13/2023.
@@ -17,6 +15,8 @@ data class Match(
     val startDate: String?,
     val startTime: String?,
     val leagueDivision: String?,
+    val hasRecentActivity: Boolean,
+    val isFavorite: Boolean = false
 ) {
     companion object {
         fun mapFromUi(uiModel: MatchUiModel) = Match(
@@ -27,7 +27,9 @@ data class Match(
             scoreboard = uiModel.scoreboard?.let { Scoreboard.mapFromUi(it) },
             startDate = uiModel.startDate,
             startTime = uiModel.startTime,
-            leagueDivision = uiModel.leagueDivision
+            leagueDivision = uiModel.leagueDivision,
+            hasRecentActivity = uiModel.hasRecentActivity,
+            isFavorite = uiModel.isFavorite
         )
     }
 }
@@ -40,5 +42,7 @@ fun Match.mapToUi() = MatchUiModel(
     this.scoreboard?.mapToUi(),
     this.startDate,
     this.startTime,
-    this.leagueDivision
+    this.leagueDivision,
+    this.hasRecentActivity,
+    this.isFavorite
 )

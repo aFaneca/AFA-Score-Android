@@ -13,4 +13,6 @@
     <string name="notification_channel_name">Atualização de jogos</string>
     <string name="notification_channel_description">Notificação de mudança no estado e resultado dos jogos subscritos</string>
     <string name="reset_filters_cta">Limpar os filtros</string>
+    <string name="favorite_stop_toast_message">Deixará de receber atualizações deste jogo</string>
+    <string name="favorite_start_toast_message">Passará a receber atualizações deste jogo</string>
 </resources>
